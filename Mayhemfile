@@ -2,4 +2,4 @@ project: vowpal-wabbit
 target: to-flatbuff
 
 cmds:
-  - cmd: /repo/build/utl/flatbuffer/to_flatbuff @@
+  - cmd: /to_flatbuff @@
