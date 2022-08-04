@@ -1,5 +1,6 @@
-#include "jni_spark_vw_generated.h"
 #include "vw/core/vw.h"
+
+#include <jni.h>
 
 // some JNI helper
 
@@ -9,12 +10,14 @@ class StringGuard
   JNIEnv* _env;
   jstring _source;
   const char* _cstr;
+  size_t _length;
 
- public:
+public:
   StringGuard(JNIEnv* env, jstring source);
   ~StringGuard();
 
   const char* c_str();
+  size_t length();
 };
 
 // properly de-alloc resource also in case of exceptions
@@ -24,7 +27,7 @@ class CriticalArrayGuard
   jarray _arr;
   void* _arr0;
 
- public:
+public:
   CriticalArrayGuard(JNIEnv* env, jarray arr);
   ~CriticalArrayGuard();
 
@@ -34,9 +37,9 @@ class CriticalArrayGuard
 // bind VW instance and example together to reduce the number of variables passed around
 class VowpalWabbitExampleWrapper
 {
- public:
-   VW::workspace* _all;
-   example* _example;
+public:
+  VW::workspace* _all;
+  example* _example;
 
-   VowpalWabbitExampleWrapper(VW::workspace* all, example* example) : _all(all), _example(example) {}
+  VowpalWabbitExampleWrapper(VW::workspace* all, example* example) : _all(all), _example(example) {}
 };

@@ -537,6 +537,28 @@ def test_example_features():
     assert ex.pop_namespace()
 
 
+def test_example_features_dict():
+    vw = Workspace(quiet=True)
+    ex = vw.example(
+        {"a": {"two": 1, "features": 1.0}, "b": {"more": 1, "features": 1, 5: 1.5}}
+    )
+    fs = list(ex.iter_features())
+
+    assert (ex.get_feature_id("a", "two"), 1) in fs
+    assert (ex.get_feature_id("a", "features"), 1) in fs
+    assert (ex.get_feature_id("b", "more"), 1) in fs
+    assert (ex.get_feature_id("b", "features"), 1) in fs
+    assert (5, 1.5) in fs
+
+
+def test_example_features_dict_long_long_index():
+    vw = Workspace(quiet=True)
+    ex = vw.example({"a": {2**40: 2}})
+    fs = list(ex.iter_features())
+
+    assert (2**40, 2) in fs
+
+
 def test_get_weight_name():
     model = Workspace(quiet=True)
     model.learn("1 | a a b c |ns x")
@@ -668,3 +690,14 @@ def test_deceprecated_labels():
         vowpalwabbit.pyvw.multiclass_probabilities_label()
         vowpalwabbit.pyvw.cost_sensitive_label()
         vowpalwabbit.pyvw.cbandits_label()
+
+
+def test_random_weights_seed():
+    # TODO: why do we need min_prediction and max_prediction?
+    shared_args = "--random_weights --quiet --min_prediction -50 --max_prediction 50"
+
+    a = Workspace(f"--random_seed 1 {shared_args}")
+    b = Workspace(f"--random_seed 2 {shared_args}")
+
+    dummy_ex_str = " | foo=bar"
+    assert a.predict(dummy_ex_str) != b.predict(dummy_ex_str)

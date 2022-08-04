@@ -2,13 +2,14 @@
 // individual contributors. All rights reserved. Released under a BSD (revised)
 // license as described in the file LICENSE.
 
+#include "vw/core/vw_string_view_fmt.h"
+
 #include "vw/common/text_utils.h"
 #include "vw/core/example.h"
 #include "vw/core/model_utils.h"
 #include "vw/core/parse_primitives.h"
 #include "vw/core/shared_data.h"
 #include "vw/core/vw.h"
-#include "vw/core/vw_string_view_fmt.h"
 #include "vw/io/logger.h"
 
 #include <cfloat>
@@ -162,6 +163,7 @@ namespace model_utils
 size_t read_model_field(io_buf& io, MULTILABEL::labels& multi)
 {
   size_t bytes = 0;
+  multi.label_v.clear();
   bytes += read_model_field(io, multi.label_v);
   return bytes;
 }

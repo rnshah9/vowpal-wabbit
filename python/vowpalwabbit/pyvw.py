@@ -516,7 +516,15 @@ class Workspace(pylibvw.vw):
             return str_ex
 
         elif isinstance(str_ex, list):
-            if all([getattr(ex, "setup_done", None) for ex in str_ex]):
+            if all(
+                [
+                    isinstance(ex, Example) and getattr(ex, "setup_done", None)
+                    for ex in str_ex
+                ]
+            ):
+                str_ex: List[
+                    Example
+                ] = str_ex  # pytype: disable=annotation-type-mismatch
                 return str_ex
 
         if not isinstance(str_ex, (list, str)):
@@ -1484,6 +1492,7 @@ class Example(pylibvw.example):
             Union[
                 str,
                 Dict[str, List[Union[Tuple[Union[str, int], float], Union[str, int]]]],
+                Dict[str, Dict[Union[str, int], float]],
                 Any,
                 pylibvw.example,
             ]
@@ -1504,8 +1513,7 @@ class Example(pylibvw.example):
                     .. deprecated:: 9.0.0
                         Using a callable object is no longer supported.
 
-                - If a dict, the keys are the namespace names and the values can either be an integer (already hashed) or a string (to be hashed) and may be paired with a value or not
-                (if not, the value is assumed to be 1.0).
+                - If a dict, the keys are the namespace names and the values are the namespace features. Namespace features can either be represented as a list or a dict. When using a list items are either keys (i.e., an int or string) in which case the value is assumed to be 1 or a key-value tuple. When using a dict the all features are represented as key-value pairs.
             labelType: Which label type this example contains. If None (or 0), the label type is inferred from the workspace configuration.
 
                 .. deprecated:: 9.0.0

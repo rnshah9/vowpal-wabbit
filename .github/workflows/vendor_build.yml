@@ -61,8 +61,7 @@ jobs:
       CMAKE_BUILD_DIR: ${{ github.workspace }}/vw/build
       SOURCE_DIR: ${{ github.workspace }}/vw
       VCPKG_ROOT: ${{ github.workspace }}/vcpkg
-      # 2022.02.23 just for boost-test
-      VCPKG_REF: b86c0c35b88e2bf3557ff49dc831689c2f085090
+      VCPKG_REF: cef0b3ec767df6e83806899fe9525f6cf8d7bc91
     steps:
       - uses: actions/checkout@v2
         with:
@@ -93,6 +92,7 @@ jobs:
         run: >
           cmake -S "${{ env.SOURCE_DIR }}" -B "${{ env.CMAKE_BUILD_DIR }}" -A "x64"
           -DCMAKE_TOOLCHAIN_FILE="${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake"
+          -DVCPKG_MANIFEST_MODE=OFF
           -DUSE_LATEST_STD=On
           -DBUILD_FLATBUFFERS=Off
           -DRAPIDJSON_SYS_DEP=Off
@@ -116,7 +116,7 @@ jobs:
     name: core-cli.${{ matrix.os }}.amd64.${{ matrix.build_type }}.AppleClang.standalone
     strategy:
       matrix:
-        os: [macos-10.15, macos-11]
+        os: [macos-11]
         build_type: [Debug, Release]
     steps:
       - uses: actions/checkout@v2
