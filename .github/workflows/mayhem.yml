@@ -51,7 +51,8 @@ jobs:
       fail-fast: false
       matrix:
         mayhemfile:
-          - mayhem/Mayhemfile
+          - mayhem/Mayhemfile_rotl32
+          - mayhem/Mayhemfile_to_flatbuff
 
     steps:
       - uses: actions/checkout@v2

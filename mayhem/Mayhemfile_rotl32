@@ -1,0 +1,6 @@
+project: vowpal-wabbit
+target: rotl32
+
+cmds:
+  - cmd: /fuzz_rotl32
+    libfuzzer: true
